@@ -16,7 +16,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SH_KEY }}
+          key: ${{ secrets.SSH_KEY }}
 
           script: |
             cd /var/www/eshop
