@@ -6,21 +6,19 @@ on:
       - dev
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          python-version: "3.11"
 
-          script: |
-            cd /var/www/eshop
-            git pull origin dev
-            nerdctl compose down
-            nerdctl compose build
-            nerdctl compose up -d
+      - name: Install requirements
+        run: pip install -r backend/requirements.txt
+
+      - name: Python syntax check
+        run: python -m compileall backend
