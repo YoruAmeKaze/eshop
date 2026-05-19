@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.env
+
+# frontend
+node_modules/
+dist/
+
+# system
+.DS_Store
+
+# logs
+*.log
+
+# IDE
+.vscode/

@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: eshop-mysql
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: eshop
+      MYSQL_USER: eshop
+      MYSQL_PASSWORD: eshop123
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - /var/www/eshop-data/mysql:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    command:
+      --default-authentication-plugin=mysql_native_password
+
+
+  registry:
+    image: registry:2
+    container_name: eshop-registry
+    restart: always
+
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - /var/www/eshop-data/registry:/var/lib/registry
+
+  backend:
+    image: eshop-backend:v3
+    container_name: eshop-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
+  registry_data:
+    
