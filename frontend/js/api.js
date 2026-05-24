@@ -82,7 +82,9 @@ const OrderAPI = {
     return request(
       'GET',
       '/api/orders',
-      );
+      null,
+      true
+    );
   },
   async create(goodsId, quantity = 1) {
     return request(

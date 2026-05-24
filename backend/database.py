@@ -286,31 +286,7 @@ class shop():
             'message': '商品不存在'
         }
 
-    def buy_goods(self, user_id, goods_id, quantity):
-        sql = 'select * from goods where id = %s'
-        self.cursor.execute(sql, (goods_id,))
-        result = self.cursor.fetchone()
-        if not result:
-            return {
-                'status': 'error',
-                'message': '商品不存在'
-            }
-        price = float(result[4])
-        merchant_id = result[1]
-        total_price = price * quantity
-        
-        return {
-            'status': 'success',
-            'message': '购买成功',
-            'data': {
-                'user_id': user_id,
-                'goods_id': goods_id,
-                'merchant_id': merchant_id,
-                'quantity': quantity,
-                'price': price,
-                'total_price': total_price
-            }
-        }
+
 
 class cart():
     def __init__(self):
@@ -388,7 +364,8 @@ class order():
 
     def create_order(self, user_id, goods_id, merchant_id, quantity, price, total_price):
         sql = 'INSERT INTO orders (user_id, goods_id, merchant_id, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s, %s)'
-        self.conn.cursor().execute(sql, (user_id, goods_id, merchant_id, quantity, price, total_price))
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (user_id, goods_id, merchant_id, quantity, price, total_price))
         self.conn.commit()
         return {
             'status': 'success',
@@ -402,8 +379,9 @@ class order():
             JOIN goods g ON o.goods_id = g.id
             WHERE o.user_id = %s
         '''
-        self.conn.cursor().execute(sql, (user_id,))
-        result = self.conn.cursor().fetchall()
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchall()
         return {
             'status': 'success',
             'data': [{
@@ -416,3 +394,28 @@ class order():
                 'name':       row[6],
             } for row in result]  
         }
+
+    def buy_goods(self, user_id, goods_id, quantity):
+        sql = 'select * from goods where id = %s'
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (goods_id,))
+        result = cursor.fetchone()
+        if not result:
+            return {
+                'status': 'error',
+                'message': '商品不存在'
+            }
+        price = float(result[4])
+        merchant_id = result[1]
+        total_price = price * quantity
+        
+        return self.create_order(
+            user_id,
+            goods_id, 
+            merchant_id, 
+            quantity, 
+            price, 
+            total_price
+        )
+
+    
