@@ -296,14 +296,18 @@ class shop():
                 'message': '商品不存在'
             }
         price = float(result[4])
+        merchant_id = result[1]
         total_price = price * quantity
-        # 这里可以添加订单表的逻辑，暂时省略
+        
         return {
             'status': 'success',
             'message': '购买成功',
             'data': {
+                'user_id': user_id,
                 'goods_id': goods_id,
+                'merchant_id': merchant_id,
                 'quantity': quantity,
+                'price': price,
                 'total_price': total_price
             }
         }
@@ -370,3 +374,23 @@ class cart():
             'image_url': row[5]
         } for row in result]  
     }
+class order():
+    def __init__(self):
+        self.conn = pymysql.connect(
+            host='eshop-mysql',
+            user='root',
+            password='123456',
+            db='eshop'
+        )
+
+    def close(self):
+        self.conn.close()
+
+    def create_order(self, user_id, goods_id, merchant_id, quantity, price, total_price):
+        sql = 'INSERT INTO orders (user_id, goods_id, merchant_id, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s, %s)'
+        self.conn.cursor().execute(sql, (user_id, goods_id, merchant_id, quantity, price, total_price))
+        self.conn.commit()
+        return {
+            'status': 'success',
+            'message': '订单创建成功'
+        }

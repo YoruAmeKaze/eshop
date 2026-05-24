@@ -42,7 +42,6 @@ class CartUpdateRequest(BaseModel):
     quantity: int
 
 class BuyRequest(BaseModel):
-    user_id: int
     goods_id: int
     quantity: int
 

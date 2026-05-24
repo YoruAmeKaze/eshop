@@ -31,7 +31,6 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     goods_id INT NOT NULL,
     merchant_id INT NOT NULL,
-
     quantity INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,

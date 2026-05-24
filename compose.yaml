@@ -35,7 +35,7 @@ services:
       - /var/www/eshop-data/registry:/var/lib/registry
 
   backend:
-    image: eshop-backend:v3
+    image: eshop-backend:v4
     container_name: eshop-backend
     restart: always
     ports:
