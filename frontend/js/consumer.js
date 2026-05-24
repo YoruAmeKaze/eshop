@@ -173,14 +173,14 @@ function renderOrders(container, list) {
     return;
   }
   container.innerHTML = list.map(o => {
-    const status = ORDER_STATUS_MAP[o.status] || { label: o.status, cls: '' };
+    const status = ORDER_STATUS_MAP[o.status || 'pending'] || { label: o.status, cls: '' };
     return `
       <div class="order-card">
         <div class="order-header">
-          <span class="order-id">订单号：#${o.id}</span>
+          <span class="order-id">订单号：#${o.order_id}</span>
           <span class="order-status ${status.cls}">${status.label}</span>
         </div>
-        <div style="font-size:14px;color:#333;margin-bottom:8px;">${o.product_name} × ${o.quantity}</div>
+        <div style="font-size:14px;color:#333;margin-bottom:8px;">${o.name} × ${o.quantity}</div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:12px;color:#999;">${o.created_at}</span>
           <span style="font-size:16px;font-weight:600;color:#1D9E75;">¥${o.total_price}</span>

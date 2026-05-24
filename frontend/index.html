@@ -154,23 +154,27 @@
       </div>
 
       <div class="tab-bar">
-        <div class="tab active" onclick="switchConsumerTab('home', this)">
+        <div class="tab active" data-tab="home" onclick="switchConsumerTab('home', this)">
           <div class="tab-icon">🏠</div>
           <div>首页</div>
         </div>
-        <div class="tab" onclick="switchConsumerTab('cart', this)">
+      
+        <div class="tab" data-tab="cart" onclick="switchConsumerTab('cart', this)">
           <div class="tab-icon">🛒</div>
           <div>购物车</div>
         </div>
-        <div class="tab" onclick="switchConsumerTab('orders', this)">
+      
+        <div class="tab" data-tab="orders" onclick="switchConsumerTab('orders', this)">
           <div class="tab-icon">📦</div>
           <div>订单</div>
         </div>
-        <div class="tab" onclick="switchConsumerTab('chat', this)">
+      
+        <div class="tab" data-tab="chat" onclick="switchConsumerTab('chat', this)">
           <div class="tab-icon">💬</div>
           <div>消息</div>
         </div>
-        <div class="tab" onclick="switchConsumerTab('me', this)">
+      
+        <div class="tab" data-tab="me" onclick="switchConsumerTab('me', this)">
           <div class="tab-icon">👤</div>
           <div>我的</div>
         </div>

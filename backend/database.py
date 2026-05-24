@@ -394,3 +394,25 @@ class order():
             'status': 'success',
             'message': '订单创建成功'
         }
+
+    def get_orders_consumer(self, user_id):
+        sql = '''
+            SELECT o.id, o.goods_id, o.merchant_id, o.quantity, o.price, o.total_price, g.name
+            FROM orders o
+            JOIN goods g ON o.goods_id = g.id
+            WHERE o.user_id = %s
+        '''
+        self.conn.cursor().execute(sql, (user_id,))
+        result = self.conn.cursor().fetchall()
+        return {
+            'status': 'success',
+            'data': [{
+                'order_id':   row[0],
+                'goods_id':   row[1],
+                'merchant_id':row[2],
+                'quantity':   row[3],
+                'price':      float(row[4]),
+                'total_price':float(row[5]),
+                'name':       row[6],
+            } for row in result]  
+        }

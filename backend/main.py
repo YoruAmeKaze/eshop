@@ -239,3 +239,16 @@ async def buy_goods(data: BuyRequest, request: Request):
     result = db.buy_goods(token_data["id"], data.goods_id, data.quantity)
     db.close()
     return result
+
+@app.get("/api/orders")
+async def get_orders(request: Request):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="缺少token")
+    token = auth_header.split(" ", 1)[1] if " " in auth_header else auth_header
+    
+    token_data = auth.decode_token(token)
+    db = goods()
+    result = db.get_orders_consumer(token_data["id"])
+    db.close()
+    return result

@@ -107,15 +107,53 @@ window.addToCart = async function (productId) {
 
 /* ---- 立即购买 ---- */
 window.buyNow = async function (productId) {
-    if (!window.currentUser) { window.showPage('page-login'); return; }
+    if (!window.currentUser) {
+        window.showPage('page-login');
+        return;
+    }
+
     try {
         const data = await OrderAPI.create(productId, 1);
+
         if (data && data.status === 'success') {
+
             window.showToast('下单成功！');
+
+            // 返回消费者页面
+            window.showPage('page-consumer');
+
+            // 切换到订单 tab
+            document.querySelectorAll('.c-tab')
+                .forEach(t => t.style.display = 'none');
+
+            const ordersTab = document.getElementById('c-orders');
+
+            if (ordersTab) {
+                ordersTab.style.display = 'flex';
+                ordersTab.style.flexDirection = 'column';
+            }
+
+            // 底部导航高亮
+            document.querySelectorAll('#page-consumer .tab')
+                .forEach(t => t.classList.remove('active'));
+
+            const orderBtn = document.querySelector(
+                '#page-consumer .tab[data-tab="orders"]'
+            );
+
+            if (orderBtn) {
+                orderBtn.classList.add('active');
+            }
+
+            // 加载订单
+            loadOrders();
+
         } else {
-            window.showToast('订单接口尚未接入');
+            window.showToast(data?.message || '下单失败');
         }
+
     } catch (e) {
+        console.error(e);
         window.showToast('操作失败，请重试');
     }
 };

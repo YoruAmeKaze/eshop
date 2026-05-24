@@ -79,13 +79,22 @@ const ProductAPI = {
    ============================================================ */
 const OrderAPI = {
   async getList() {
-    // return request('GET', '/api/orders', null, true);
-    return null;
+    return request(
+      'GET',
+      '/api/orders',
+      );
   },
-  async create(productId, quantity) {
-    // return request('POST', '/api/orders', { product_id: productId, quantity }, true);
-    return null;
+  async create(productId, quantity = 1) {
+    return request(
+      'POST',
+      '/api/orders/buy',
+      {
+        goods_id: goodsId,
+        quantity: quantity,
+      }
+    );
   },
+  
   async getMerchantOrders() {
     // return request('GET', '/api/merchant/orders', null, true);
     return null;
