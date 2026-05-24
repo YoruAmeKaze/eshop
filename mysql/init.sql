@@ -25,3 +25,22 @@ CREATE TABLE IF NOT EXISTS cart (
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY unique_cart_item (user_id, goods_id)  -- 同一商品不重复，只加数量
 );
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+
+    user_id INT NOT NULL,
+    goods_id INT NOT NULL,
+    merchant_id INT NOT NULL,
+
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    total_price DECIMAL(10,2) NOT NULL,
+
+    status ENUM(
+        'pending',
+        'paid',
+        'cancelled'
+    ) DEFAULT 'pending',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

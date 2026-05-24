@@ -286,6 +286,28 @@ class shop():
             'message': '商品不存在'
         }
 
+    def buy_goods(self, user_id, goods_id, quantity):
+        sql = 'select * from goods where id = %s'
+        self.cursor.execute(sql, (goods_id,))
+        result = self.cursor.fetchone()
+        if not result:
+            return {
+                'status': 'error',
+                'message': '商品不存在'
+            }
+        price = float(result[4])
+        total_price = price * quantity
+        # 这里可以添加订单表的逻辑，暂时省略
+        return {
+            'status': 'success',
+            'message': '购买成功',
+            'data': {
+                'goods_id': goods_id,
+                'quantity': quantity,
+                'total_price': total_price
+            }
+        }
+
 class cart():
     def __init__(self):
         self.conn = pymysql.connect(

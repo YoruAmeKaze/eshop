@@ -41,6 +41,11 @@ class CartAddRequest(BaseModel):
 class CartUpdateRequest(BaseModel):
     quantity: int
 
+class BuyRequest(BaseModel):
+    user_id: int
+    goods_id: int
+    quantity: int
+
 VALID_CATEGORIES = {'electronic','clothes','living','beauty','sports','baby','food','book','others'}
 
 @app.post("/api/register")
@@ -223,3 +228,15 @@ async def adjust_cart(product_id: int, data: CartUpdateRequest, request: Request
     db.close()
     return result
 
+@app.post("/api/orders/buy")
+async buy_goods(data: BuyRequest, request: Request):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="缺少token")
+    token = auth_header.split(" ", 1)[1] if " " in auth_header else auth_header
+    
+    token_data = auth.decode_token(token)
+    db = goods()
+    result = db.buy_goods(token_data["id"], data.goods_id, data.quantity)
+    db.close()
+    return result
