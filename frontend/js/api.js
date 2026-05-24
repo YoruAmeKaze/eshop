@@ -84,7 +84,7 @@ const OrderAPI = {
       '/api/orders',
       );
   },
-  async create(productId, quantity = 1) {
+  async create(goodsId, quantity = 1) {
     return request(
       'POST',
       '/api/orders/buy',
@@ -94,7 +94,7 @@ const OrderAPI = {
       }
     );
   },
-  
+
   async getMerchantOrders() {
     // return request('GET', '/api/merchant/orders', null, true);
     return null;
