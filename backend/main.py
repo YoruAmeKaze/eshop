@@ -229,7 +229,7 @@ async def adjust_cart(product_id: int, data: CartUpdateRequest, request: Request
     return result
 
 @app.post("/api/orders/buy")
-async buy_goods(data: BuyRequest, request: Request):
+async def buy_goods(data: BuyRequest, request: Request):
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         raise HTTPException(status_code=401, detail="缺少token")
