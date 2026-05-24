@@ -235,7 +235,7 @@ async def buy_goods(data: BuyRequest, request: Request):
     token = auth_header.split(" ", 1)[1] if " " in auth_header else auth_header
     
     token_data = auth.decode_token(token)
-    db = order()
+    db = shop()
     result = db.buy_goods(token_data["id"], data.goods_id, data.quantity)
     db.close()
     return result
