@@ -91,7 +91,8 @@ const OrderAPI = {
       {
         goods_id: goodsId,
         quantity: quantity,
-      }
+      },
+      true
     );
   },
 
