@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 
 import auth
-from database import user_database, shop, cart
+from database import user_database, shop, cart, order
 
 app = FastAPI()
 
@@ -248,7 +248,7 @@ async def get_orders(request: Request):
     token = auth_header.split(" ", 1)[1] if " " in auth_header else auth_header
     
     token_data = auth.decode_token(token)
-    db = goods()
+    db = order()
     result = db.get_orders_consumer(token_data["id"])
     db.close()
     return result
