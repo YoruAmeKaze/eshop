@@ -366,7 +366,6 @@ class order():
         sql = 'INSERT INTO orders (user_id, goods_id, merchant_id, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s, %s)'
         cursor = self.conn.cursor()
         cursor.execute(sql, (user_id, goods_id, merchant_id, quantity, price, total_price))
-        self.conn.commit()
         return {
             'status': 'success',
             'message': '订单创建成功'
@@ -407,9 +406,8 @@ class order():
             }
         price = float(result[4])
         merchant_id = result[1]
-        total_price = price * quantity
-        
-        return self.create_order(
+        total_price = price * quantity  
+        result = self.create_order(
             user_id,
             goods_id, 
             merchant_id, 
@@ -417,5 +415,45 @@ class order():
             price, 
             total_price
         )
+        self.conn.commit()
+        return result
+
+    def buy_cart(self, user_id):
+        sql = '''
+            SELECT c.goods_id, c.quantity, g.price, g.merchant_id
+            FROM cart c
+            JOIN goods g ON c.goods_id = g.id
+            WHERE c.user_id = %s
+        '''
+        cursor = self.conn.cursor()
+        cursor.execute(sql, (user_id,))
+        result = cursor.fetchall()
+        if not result:
+            return {
+                'status': 'error',
+                'message': '购物车为空'
+            }
+        for row in result:
+            goods_id = row[0]
+            quantity = row[1]
+            price = float(row[2])
+            merchant_id = row[3]
+            total_price = price * quantity
+            self.create_order(
+                user_id,
+                goods_id,
+                merchant_id,
+                quantity,
+                price,
+                total_price
+            )
+        # 清空购物车
+        sql = 'DELETE FROM cart WHERE user_id = %s'
+        cursor.execute(sql, (user_id,))
+        self.conn.commit()
+        return {
+            'status': 'success',
+            'message': '购买成功'
+        }
 
     

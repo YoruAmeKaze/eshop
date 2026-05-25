@@ -120,6 +120,9 @@ const CartAPI = {
   async updateQuantity(goodsId, quantity) {
     return request('PUT', `/api/cart/${goodsId}`, { quantity }, true);
   },
+  async checkout() {
+    return request('POST', '/api/cart/checkout', null, true);
+  }
 };
 
 /* ============================================================

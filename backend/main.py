@@ -252,3 +252,16 @@ async def get_orders(request: Request):
     result = db.get_orders_consumer(token_data["id"])
     db.close()
     return result
+
+@app.post("/api/cart/checkout")
+async def buy_cart(request: Request):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="缺少token")
+    token = auth_header.split(" ", 1)[1] if " " in auth_header else auth_header
+    
+    token_data = auth.decode_token(token)
+    db = order()
+    result = db.buy_cart(token_data["id"])
+    db.close()
+    return result

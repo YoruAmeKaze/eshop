@@ -247,7 +247,7 @@ function renderCart(container, list) {
         <span class="cart-total-price">¥${total.toFixed(2)}</span>
       </div>
     </div>
-    <button class="cart-checkout" onclick="window.showToast('结算功能开发中')">结算</button>
+    <button class="cart-checkout" onclick="checkoutCart()">结算</button>
   `;
 }
 
@@ -276,6 +276,35 @@ window.changeCartQuantity = async function (goodsId, quantity) {
     }
   } catch (err) {
     window.showToast('修改失败');
+  }
+};
+
+window.checkoutCart = async function () {
+  try {
+    const data = await CartAPI.checkout();
+
+    if (data && data.status === 'success') {
+      window.showToast('购买成功');
+
+      // 刷新购物车
+      loadCart();
+
+      // 自动切到订单页
+      const orderTab = document.querySelector(
+        '#page-consumer .tab:nth-child(3)'
+      );
+
+      if (orderTab) {
+        switchConsumerTab('orders', orderTab);
+      }
+
+    } else {
+      window.showToast(data?.message || '购买失败');
+    }
+
+  } catch (err) {
+    console.error(err);
+    window.showToast('购买失败，请稍后重试');
   }
 };
 
