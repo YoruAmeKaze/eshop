@@ -36,6 +36,9 @@ services:
 
   backend:
     image: eshop-backend:v4
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: eshop-backend
     restart: always
     ports:
